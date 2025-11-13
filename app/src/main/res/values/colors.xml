@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="fondo">#FFFFFFFF</color>
+    <color name="fondoCard">#C2A9ED</color>
+    <color name="textoItem">#000000</color>
+    <color name="color_primary">#FFFFFF</color>
+    <color name="btn_ripple_primary">#1F5B8BD9</color>
+
+
+</resources>

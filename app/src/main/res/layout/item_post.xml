@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Material3.CardView.Elevated"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="16dp"
+    app:cardBackgroundColor="@color/fondoCard"
+    app:strokeColor="@color/fondoCard"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Cabecera -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@drawable/bg_avatar"
+                android:background="@drawable/bg_avatar"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginStart="12dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/txtName"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@color/textoItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre" />
+
+                <TextView
+                    android:id="@+id/txtMeta"
+                    android:textSize="13sp"
+                    android:textColor="@color/textoItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@usuario · 2h" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Contenido -->
+        <TextView
+            android:id="@+id/txtContent"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="2dp"
+            android:textSize="15sp"
+            android:textColor="@color/textoItem"
+            android:text="Texto del post…" />
+
+        <!-- Acciones -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLike"
+                style="@style/ThemeOverlay.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Like"
+                android:textColor="@color/color_primary"
+                app:iconTint="@color/color_primary"
+                app:rippleColor="@color/btn_ripple_primary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReply"
+                style="@style/ThemeOverlay.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comentar"
+                android:textColor="@color/color_primary"
+                app:iconTint="@color/color_primary"
+                app:rippleColor="@color/btn_ripple_primary" />
+        </LinearLayout>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
