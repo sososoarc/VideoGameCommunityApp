@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1022411672689",
+    "project_id": "fragments-acd62",
+    "storage_bucket": "fragments-acd62.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1022411672689:android:c192e72c93032ace725fd0",
+        "android_client_info": {
+          "package_name": "com.example.fragments"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVLyPwtmQ_CcaP3WnTcvFOSB6Wvw4BM5o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

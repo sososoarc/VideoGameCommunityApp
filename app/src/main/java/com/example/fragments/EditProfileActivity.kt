@@ -1,80 +1,114 @@
 package com.example.fragments
 
-
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
-import com.example.fragments.AppDatabase
 import com.example.fragments.databinding.ActivityEditProfileBinding
-import kotlinx.coroutines.launch
-import java.io.IOException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.bumptech.glide.Glide
 
 class EditProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditProfileBinding
-    private lateinit var db: AppDatabase
-    private var email: String? = null
+    private val auth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
+    private val storage = FirebaseStorage.getInstance()
+
     private var imageUri: Uri? = null
+    private var uid: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "user_database"
-        ).build()
 
-        email = intent.getStringExtra("USER_EMAIL")
+        uid = intent.getStringExtra("USER_UID") ?: auth.currentUser!!.uid
+
+        loadUserData()
 
         binding.btnChangePhoto.setOnClickListener {
-            pickImageLauncher.launch("image/*")
+            pickImage.launch("image/*")
         }
 
         binding.btnSaveChanges.setOnClickListener {
-            val newName = binding.etNewUsername.text.toString().trim()
-            if (newName.isEmpty()) {
-                Toast.makeText(this, "Ingresa un nombre válido", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            lifecycleScope.launch {
-                val user = email?.let { db.userDao().getUserByEmail(it) }
-                if (user != null) {
-                    val updatedUser = user.copy(email = newName)
-                    db.userDao().insertUser(updatedUser)
-                    runOnUiThread {
-                        Toast.makeText(this@EditProfileActivity, "Nombre actualizado", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this@EditProfileActivity, HomeActivity::class.java))
-                        finish()
-                    }
-                }
-            }
+            saveChanges()
         }
 
         binding.btnLogout.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            auth.signOut()
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
     }
 
-    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            imageUri = it
-            try {
-                val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, it)
-                binding.ivPreview.setImageBitmap(bitmap)
-            } catch (e: IOException) {
-                e.printStackTrace()
+    private fun loadUserData() {
+        db.collection("users").document(uid).get()
+            .addOnSuccessListener { doc ->
+                val username = doc.getString("username") ?: ""
+                val profileImage = doc.getString("profileImage") ?: ""
+
+                binding.tvUsername.text = username
+                binding.etNewUsername.setText(username)
+
+                if (profileImage.isNotEmpty()) {
+                    Glide.with(this)
+                        .load(profileImage)
+                        .into(binding.ivPreview)
+                }
             }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error al cargar datos", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun saveChanges() {
+        val newUsername = binding.etNewUsername.text.toString().trim()
+
+        if (newUsername.isEmpty()) {
+            Toast.makeText(this, "Ingresa un nombre válido", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (imageUri != null) {
+            val ref = storage.reference.child("profiles/$uid.jpg")
+
+            ref.putFile(imageUri!!)
+                .continueWithTask { ref.downloadUrl }
+                .addOnSuccessListener { url ->
+                    updateUserFirestore(newUsername, url.toString())
+                }
+        } else {
+            updateUserFirestore(newUsername, null)
         }
     }
+
+    private fun updateUserFirestore(username: String, imageUrl: String?) {
+        val updates = mutableMapOf<String, Any>("username" to username)
+
+        if (imageUrl != null) updates["profileImage"] = imageUrl
+
+        db.collection("users").document(uid)
+            .update(updates)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Cambios guardados", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private val pickImage =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.let {
+                imageUri = it
+                binding.ivPreview.setImageURI(it)
+            }
+        }
 }

@@ -1,80 +1,79 @@
 package com.example.fragments
 
-
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.android.identity.util.UUID
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
+import com.example.fragments.databinding.ActivityCommunityPostBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CommunityPost : AppCompatActivity() {
 
-    private lateinit var etContent: TextInputEditText
-    private lateinit var btnPublicar: MaterialButton
+    private lateinit var binding: ActivityCommunityPostBinding
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+
+    private var name = ""
+    private var handle = ""
+    private var profileImage = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_communitypost)
+        binding = ActivityCommunityPostBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        etContent = findViewById(R.id.etContent)
-        btnPublicar = findViewById(R.id.btnPublicar)
+        loadUserData()
 
-        btnPublicar.isEnabled = false
+        binding.btnPublicar.setOnClickListener {
+            val content = binding.etContent.text.toString().trim()
 
-        etContent.addTextChangedListener(
-            object : android.text.TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    btnPublicar.isEnabled = !s.isNullOrBlank()
-                }
-                override fun afterTextChanged(s: android.text.Editable?) {}
+            if (content.isEmpty()) {
+                Toast.makeText(this, "Escribe algo", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            publishPost(content)
+        }
+    }
+
+    private fun loadUserData() {
+        val uid = auth.currentUser!!.uid
+
+        db.collection("users").document(uid).get()
+            .addOnSuccessListener { doc ->
+                name = doc.getString("username") ?: "Usuario"
+                handle = doc.getString("handle") ?: "@usuario"
+                profileImage = doc.getString("profileImage") ?: ""
+            }
+    }
+
+    private fun publishPost(content: String) {
+        val postId = UUID.randomUUID().toString()
+        val uid = auth.currentUser!!.uid
+        val time = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+
+        val post = Post(
+            id = postId,
+            userId = uid,
+            name = name,
+            handle = handle,
+            profileImage = profileImage,
+            time = time,
+            content = content
         )
 
-        btnPublicar.setOnClickListener { publicar() }
-    }
-
-    private fun publicar() {
-        val content = etContent.text?.toString()?.trim().orEmpty()
-
-        if (content.isEmpty()) {
-            etContent.error = "Escribe tu publicación"
-            return
-        }
-
-        btnPublicar.isEnabled = false
-        val postDao = DatabaseProvider.getDatabase(this).postDao() // ✅ con p minúscula
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            postDao.insert(
-                Post(
-                    id = UUID.randomUUID().toString(),
-                    name = "Usuario",
-                    handle = "@usuario",
-                    time = "",
-                    content = content,
-                    avatarRes = R.drawable.ic_launcher_foreground
-                )
-            )
-
-            launch(Dispatchers.Main) {
-                hideKeyboard()
-                Toast.makeText(this@CommunityPost, "Publicado", Toast.LENGTH_SHORT).show()
+        db.collection("posts").document(postId)
+            .set(post)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Publicado", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, Community::class.java))
                 finish()
             }
-        }
-    }
-
-    @SuppressLint("ServiceCast")
-    private fun hideKeyboard() {
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        currentFocus?.windowToken?.let { imm.hideSoftInputFromWindow(it, 0) }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error al publicar", Toast.LENGTH_SHORT).show()
+            }
     }
 }

@@ -4,93 +4,107 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fragments.AppDatabase
-import com.example.fragments.DatabaseProvider
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import com.example.fragments.databinding.ActivityCommunityBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 
 class Community : AppCompatActivity() {
 
-    private lateinit var toolbar: MaterialToolbar
-    private lateinit var recycler: RecyclerView
+    private lateinit var binding: ActivityCommunityBinding
     private lateinit var adapter: PostAdapter
-    private lateinit var db: AppDatabase
-    private lateinit var postDao: PostDao
-    private lateinit var fabAdd: FloatingActionButton
-    private lateinit var bottomNavigation: BottomNavigationView
+    private val items = mutableListOf<Post>()
 
-    private val items: MutableList<Post> = mutableListOf()
+    private val auth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_community)
+        binding = ActivityCommunityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        initUi()
-        initDatabase()
-        observePosts()
-        setupFab()
+        setupRecycler()
         setupBottomNav()
+        setupFab()
+        setupProfileButton()
+        listenForPosts()   // ← AQUÍ cargamos los posts en tiempo real
     }
 
-    private fun initUi() {
-        toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
 
-        recycler = findViewById(R.id.recycler)
-        recycler.layoutManager = LinearLayoutManager(this)
-        recycler.setHasFixedSize(true)
-        recycler.itemAnimator = DefaultItemAnimator()
+    private fun setupRecycler() {
+        binding.recycler.layoutManager = LinearLayoutManager(this)
+        binding.recycler.setHasFixedSize(true)
+        binding.recycler.itemAnimator = DefaultItemAnimator()
 
         adapter = PostAdapter(
-            items = items,
+            items,
             onLike = { post ->
-                Toast.makeText(this, "Like a ${post.name}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Like ♥ a ${post.name}", Toast.LENGTH_SHORT).show()
             },
             onReply = { post ->
-                Toast.makeText(this, "Comentar a ${post.name}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Responder a ${post.name}", Toast.LENGTH_SHORT).show()
             },
             onLongPress = { post ->
                 confirmDelete(post)
             }
         )
-        recycler.adapter = adapter
+
+        binding.recycler.adapter = adapter
     }
 
+
+    private fun listenForPosts() {
+        db.collection("posts")
+            .orderBy("time", Query.Direction.DESCENDING)
+            .addSnapshotListener { value, error ->
+                if (error != null) return@addSnapshotListener
+
+                items.clear()
+                for (doc in value!!) {
+                    val post = doc.toObject(Post::class.java)
+                    items.add(post)
+                }
+                adapter.notifyDataSetChanged()
+            }
+    }
+
+
     private fun setupFab() {
-        fabAdd = findViewById(R.id.fabAdd)
-        fabAdd.setOnClickListener {
+        binding.fabAdd.setOnClickListener {
             startActivity(Intent(this, CommunityPost::class.java))
         }
     }
 
-    private fun setupBottomNav() {
-        bottomNavigation = findViewById(R.id.bottomNavigation)
-        bottomNavigation.selectedItemId = R.id.nav_community
 
-        bottomNavigation.setOnItemSelectedListener { item ->
+    private fun setupProfileButton() {
+        binding.profile.setOnClickListener {
+            val i = Intent(this, EditProfileActivity::class.java)
+            startActivity(i)
+        }
+    }
+
+
+    private fun setupBottomNav() {
+        binding.bottomNavigation.selectedItemId = R.id.nav_community
+
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_community -> true
                 R.id.nav_achievements -> {
                     startActivity(Intent(this, AchievementsActivity::class.java))
-                    overridePendingTransition(0, 0)
                     true
                 }
                 R.id.nav_chats -> {
                     startActivity(Intent(this, ChatListActivity::class.java))
-                    overridePendingTransition(0, 0)
                     true
                 }
                 R.id.nav_profile -> {
                     startActivity(Intent(this, HomeActivity::class.java))
-                    overridePendingTransition(0, 0)
                     true
                 }
                 else -> false
@@ -98,36 +112,26 @@ class Community : AppCompatActivity() {
         }
     }
 
-    private fun initDatabase() {
-        db = DatabaseProvider.getDatabase(this)
-        postDao = db.postDao()
-    }
-
-    private fun observePosts() {
-        lifecycleScope.launch {
-            postDao.getAllFlow().collectLatest { posts ->
-                items.clear()
-                items.addAll(posts)
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
 
     private fun confirmDelete(post: Post) {
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Eliminar publicación")
             .setMessage("¿Quieres eliminar esta publicación?")
-            .setPositiveButton("Eliminar") { d, _ ->
+            .setPositiveButton("Eliminar") { dialog, _ ->
                 deletePost(post)
-                d.dismiss()
+                dialog.dismiss()
             }
             .setNegativeButton("Cancelar", null)
             .show()
     }
 
     private fun deletePost(post: Post) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            postDao.deleteById(post.id)
-        }
+        db.collection("posts").document(post.id).delete()
+            .addOnSuccessListener {
+                Toast.makeText(this, "Eliminado", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error al eliminar", Toast.LENGTH_SHORT).show()
+            }
     }
 }

@@ -8,6 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+        <EditText
+            android:id="@+id/etUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre de usuario"
+            android:inputType="textPersonName"
+            android:layout_marginTop="16dp" />
+
         <EditText
             android:id="@+id/etEmail"
             android:hint="Correo electrónico"
@@ -30,6 +39,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"/>
+
+
 
         <Button
             android:id="@+id/btnRegister"

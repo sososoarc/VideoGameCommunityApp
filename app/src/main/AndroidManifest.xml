@@ -17,6 +17,7 @@
         <activity android:name=".HomeActivity"/>
         <activity android:name=".CommunityPost"/>
         <activity android:name=".Community"/>
+        <activity android:name=".EditProfileActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
