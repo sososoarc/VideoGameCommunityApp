@@ -6,6 +6,9 @@
     <color name="textoItem">#000000</color>
     <color name="color_primary">#FFFFFF</color>
     <color name="btn_ripple_primary">#1F5B8BD9</color>
-
+    <color name="black_dark">#070E10</color>
+    <color name="green_dark">#1C2D2D</color>
+    <color name="gray_green">#506565</color>
+    <color name="green_gray_light">#95B6A9</color>
 
 </resources>

@@ -100,7 +100,7 @@ class Community : AppCompatActivity() {
                     true
                 }
                 R.id.nav_chats -> {
-                    startActivity(Intent(this, ChatListActivity::class.java))
+                    startActivity(Intent(this, UserListActivity::class.java))
                     true
                 }
                 R.id.nav_profile -> {
