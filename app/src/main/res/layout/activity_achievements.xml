@@ -2,9 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+
+    >
 
     <TextView
         android:id="@+id/titleAchievements"
@@ -22,9 +25,15 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerAchievements"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="15dp"
+        android:layout_height="618dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="80dp"
+        android:animation="@anim/popup_animation"
+        android:clipToPadding="false"
         android:padding="40dp"
-        android:animation="@anim/popup_animation" />
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
 
 </LinearLayout>

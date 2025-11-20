@@ -34,6 +34,8 @@ class AchievementsActivity : AppCompatActivity() {
         binding.recyclerAchievements.adapter = adapter
     }
 
+
+
     private fun loadAchievementsFromFirebase() {
         db.collection("users")
             .document(userId)
