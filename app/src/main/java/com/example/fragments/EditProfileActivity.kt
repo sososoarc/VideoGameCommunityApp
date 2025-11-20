@@ -27,7 +27,6 @@ class EditProfileActivity : AppCompatActivity() {
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         uid = intent.getStringExtra("USER_UID") ?: auth.currentUser!!.uid
 
         loadUserData()
@@ -75,23 +74,33 @@ class EditProfileActivity : AppCompatActivity() {
             return
         }
 
+        // Si hay nueva foto → primero la subimos
         if (imageUri != null) {
             val ref = storage.reference.child("profiles/$uid.jpg")
-
             ref.putFile(imageUri!!)
                 .continueWithTask { ref.downloadUrl }
                 .addOnSuccessListener { url ->
                     updateUserFirestore(newUsername, url.toString())
                 }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Error al subir la foto", Toast.LENGTH_SHORT).show()
+                }
         } else {
+            // Si NO hay nueva foto → solo actualizar username
             updateUserFirestore(newUsername, null)
         }
     }
 
     private fun updateUserFirestore(username: String, imageUrl: String?) {
-        val updates = mutableMapOf<String, Any>("username" to username)
+        val updates = mutableMapOf<String, Any>()
 
-        if (imageUrl != null) updates["profileImage"] = imageUrl
+        // Actualiza username SIEMPRE
+        updates["username"] = username
+
+        // Actualiza foto SOLO si imageUrl no es null
+        if (imageUrl != null) {
+            updates["profileImage"] = imageUrl
+        }
 
         db.collection("users").document(uid)
             .update(updates)

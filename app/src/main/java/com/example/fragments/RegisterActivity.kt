@@ -43,7 +43,9 @@ class RegisterActivity : AppCompatActivity() {
                         uid = uid,
                         email = email,
                         username = username,
-                        profileImage = ""
+                        profileImage = "",       // se actualizará en EditProfile
+                        lastMessage = "",
+                        timestamp = System.currentTimeMillis()
                     )
 
                     db.collection("users").document(uid)
@@ -52,6 +54,9 @@ class RegisterActivity : AppCompatActivity() {
                             Toast.makeText(this, "Cuenta creada correctamente", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this, LoginActivity::class.java))
                             finish()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Error al guardar usuario: ${e.message}", Toast.LENGTH_SHORT).show()
                         }
                 }
                 .addOnFailureListener {
