@@ -1,5 +1,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/green_dark"/>
+    <solid android:color="#8A0202"/>
     <corners android:radius="20dp"/> <!-- Ajusta el radio a tu gusto -->
     <padding
         android:left="10dp"

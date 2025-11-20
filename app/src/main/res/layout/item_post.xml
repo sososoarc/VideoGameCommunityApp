@@ -8,8 +8,8 @@
     android:layout_marginTop="12dp"
     app:cardUseCompatPadding="true"
     app:cardCornerRadius="16dp"
-    app:cardBackgroundColor="@color/fondoCard"
-    app:strokeColor="@color/fondoCard"
+    app:cardBackgroundColor="@color/green_gray_light"
+    app:strokeColor="@color/green_gray_light"
     app:strokeWidth="1dp">
 
     <LinearLayout
@@ -46,8 +46,10 @@
                     android:textSize="15sp"
                     android:textColor="@color/textoItem"
                     android:layout_width="wrap_content"
+
                     android:layout_height="wrap_content"
-                    android:text="Nombre" />
+                    android:text="Nombre"
+                    android:textColorHint="@color/green_dark"/>
 
                 <TextView
                     android:id="@+id/txtMeta"
@@ -55,7 +57,8 @@
                     android:textColor="@color/textoItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@usuario · 2h" />
+                    android:text="@user · 2h"
+                    android:textColorHint="@color/green_dark"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -67,8 +70,9 @@
             android:layout_height="wrap_content"
             android:lineSpacingExtra="2dp"
             android:textSize="15sp"
-            android:textColor="@color/textoItem"
-            android:text="Texto del post…" />
+            android:textColor="@color/green_dark"
+            android:text="Texto del post…"
+            />
 
         <!-- Acciones -->
         <LinearLayout
@@ -83,7 +87,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Like"
-                android:textColor="@color/color_primary"
+                android:textColor="#fff"
+                android:background="@drawable/rounded_green_button"
                 app:iconTint="@color/color_primary"
                 app:rippleColor="@color/btn_ripple_primary" />
 
@@ -95,7 +100,9 @@
                 android:text="Comentar"
                 android:textColor="@color/color_primary"
                 app:iconTint="@color/color_primary"
-                app:rippleColor="@color/btn_ripple_primary" />
+                android:background="@drawable/rounded_green_button"
+                app:rippleColor="@color/btn_ripple_primary"
+                android:layout_marginLeft="10dp"/>
         </LinearLayout>
 
     </LinearLayout>

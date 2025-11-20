@@ -6,7 +6,13 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:background="@drawable/logowebfragments"/>
 
 
         <EditText
@@ -15,14 +21,19 @@
             android:layout_height="wrap_content"
             android:hint="Nombre de usuario"
             android:inputType="textPersonName"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="85dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/edittext_selector"
+            />
 
         <EditText
             android:id="@+id/etEmail"
             android:hint="Correo electrónico"
             android:inputType="textEmailAddress"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_selector"
+            android:layout_marginBottom="25dp"/>
 
         <EditText
             android:id="@+id/etPassword"
@@ -30,7 +41,8 @@
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/edittext_selector"/>
 
         <EditText
             android:id="@+id/etConfirmPassword"
@@ -38,7 +50,9 @@
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"/>
+            android:background="@drawable/edittext_selector"
+            android:layout_marginBottom="50dp"
+            />
 
 
 
@@ -46,8 +60,13 @@
             android:id="@+id/btnRegister"
             android:text="Registrarse"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"/>
+            android:layout_height="45dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_green_button"
+            android:textColor="#fff"
+            android:textStyle="bold"
+
+            />
 
     </LinearLayout>
 </ScrollView>

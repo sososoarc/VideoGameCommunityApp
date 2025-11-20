@@ -45,7 +45,7 @@ class CommunityPost : AppCompatActivity() {
         db.collection("users").document(uid).get()
             .addOnSuccessListener { doc ->
                 name = doc.getString("username") ?: "Usuario"
-                handle = doc.getString("handle") ?: "@usuario"
+                handle = doc.getString("username") ?: "@usuario"
                 profileImage = doc.getString("profileImage") ?: ""
             }
     }

@@ -11,20 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_green_button"
-        />
+        android:textColor="#FFFF"
+        android:textStyle="bold"
+        android:backgroundTint="@null"/>
+
 
     <Button
         android:id="@+id/btnRegister"
         android:text="Registrarse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:background="@drawable/rounded_green_button"
-        android:layout_marginTop="16dp"/>
+        android:textColor="#FFFF"
+        android:textStyle="bold"
+        android:backgroundTint="@null"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btnGoogleSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp" />
-
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_green_button"
+        android:backgroundTint="@null"/>
 </LinearLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAFAFA"
@@ -17,12 +18,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:textColorHint="@color/green_dark"
+        android:textStyle="bold"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardInput"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="345dp"
+        android:layout_height="523dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="16dp"
         app:cardBackgroundColor="@android:color/white"
@@ -35,7 +38,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="500dp"
             android:padding="12dp"
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusBottomEnd="12dp"
@@ -55,22 +58,24 @@
                 android:inputType="textMultiLine"
                 android:minHeight="200dp"
                 android:textColor="#333333"
+                android:textColorHint="@color/green_dark"
                 android:textSize="15sp" />
         </com.google.android.material.textfield.TextInputLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPublicar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="363dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/green_dark"
+        android:shadowRadius="25"
         android:text="Publicar"
         android:textAllCaps="false"
-        android:textSize="16sp"
-        android:backgroundTint="#4CAF50"
         android:textColor="@android:color/white"
+        android:textStyle="bold"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

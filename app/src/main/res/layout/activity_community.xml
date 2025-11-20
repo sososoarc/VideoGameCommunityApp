@@ -12,7 +12,7 @@
         android:layout_margin="20dp"
         android:layout_gravity="top|end"
         app:srcCompat="@drawable/ic_profile"
-        app:backgroundTint="?attr/colorPrimary"
+        app:backgroundTint="@color/gray_green"
         app:tint="@android:color/white"
         app:layout_anchorGravity="top|end" />
 
@@ -39,7 +39,7 @@
         android:contentDescription="Agregar publicación"
         android:layout_gravity="bottom|end"
         app:srcCompat="@drawable/ic_add"
-        app:backgroundTint="?attr/colorPrimary"
+        app:backgroundTint="@color/green_gray_light"
         app:tint="@android:color/white"
         app:layout_anchorGravity="bottom|end" />
 
@@ -51,8 +51,8 @@
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/nav_item_color"
-        app:itemTextColor="@color/nav_item_color"
+        app:itemIconTint="@color/green_dark"
+        app:itemTextColor="@color/green_dark"
         android:elevation="8dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

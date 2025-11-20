@@ -12,7 +12,7 @@
         android:layout_height="60dp"
         android:padding="16dp"
         android:gravity="center_vertical"
-        android:background="#A855F7">
+        android:background="@color/green_dark">
 
         <TextView
             android:id="@+id/tvReceiverName"
@@ -50,7 +50,8 @@
             android:padding="12dp"
             android:background="@drawable/bg_edittext"
             android:textColor="#000"
-            android:textColorHint="#888" />
+            android:textColorHint="@color/green_dark"
+            />
 
         <ImageButton
             android:id="@+id/btnSend"

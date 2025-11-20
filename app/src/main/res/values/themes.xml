@@ -1,9 +1,39 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Fragments" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- ========================================================= -->
+    <!-- ESTILO UNIVERSAL PARA BOTONES                            -->
+    <!-- ========================================================= -->
+    <style name="MyButtonStyle" parent="@android:style/Widget.Button">
+        <!-- Quitar fondos automáticos -->
+        <item name="android:background">@null</item>
+        <item name="background">@null</item>
+
+        <!-- Quitar tint de Material -->
+        <item name="backgroundTint">@null</item>
+        <item name="android:backgroundTint">@null</item>
+
+        <!-- Evitar animaciones raras -->
+        <item name="android:stateListAnimator">@null</item>
     </style>
 
-    <style name="Theme.Fragments" parent="Base.Theme.Fragments" />
+    <!-- ========================================================= -->
+    <!-- TEMA BASE DE TU APP                                       -->
+    <!-- ========================================================= -->
+    <style name="Base.Theme.Fragments" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Forzar tu estilo de botón -->
+        <item name="buttonStyle">@style/MyButtonStyle</item>
+        <item name="android:buttonStyle">@style/MyButtonStyle</item>
+        <item name="materialButtonStyle">@style/MyButtonStyle</item>
+        <item name="materialButtonOutlinedStyle">@style/MyButtonStyle</item>
+
+        <!-- Para evitar recoloraciones automáticas de Material -->
+        <item name="colorButtonNormal">@null</item>
+        <item name="android:colorButtonNormal">@null</item>
+    </style>
+
+    <!-- ========================================================= -->
+    <!-- TEMA FINAL QUE USAS EN EL MANIFEST                       -->
+    <!-- ========================================================= -->
+    <style name="Theme.Fragments" parent="Base.Theme.Fragments"/>
 </resources>
